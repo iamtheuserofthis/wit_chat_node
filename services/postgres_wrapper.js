@@ -8,6 +8,14 @@ const pool = new Pool({
     port:process.env.PG_CHAT_PORT,
 })   //will this cause a prolem by being executed after the following section
 
+//module.exports.
 module.exports.getIntentRes = (intent_name) => {
     return pool.query('SELECT * from test_chat WHERE intent=$1',intent_name)
 }
+
+/*
+getIntentRes(['info_query']).then((res)=>{
+    console.log(res.rows[0])    
+})
+
+*/

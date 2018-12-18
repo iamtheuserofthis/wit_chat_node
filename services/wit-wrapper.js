@@ -10,9 +10,9 @@ const client = new Wit({
 //console.log(client.message('afcat'))
 
 answer_questions = (msg)=>{
-    client.message(msg).then((Response)=>{
-        console.log(Response)
-    })
+    return client.message(msg)   
 }
 
-answer_questions('afcat')
+var intents = answer_questions('Hi')
+
+console.log(intents)
