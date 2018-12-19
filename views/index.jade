@@ -1,7 +1,19 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+ 
+  div.container
+    h1= title
+    p Welcome to #{title}
+      div.rows
+        
+        form(action="/", method="post")
+          div.form-group
+            label(for="eadd") Email Address
+            input(type="text", name="emailid")#eadd.form-control
+          div.form-group
+            label(for="name") Name
+            input(type="text", name="name")#name.form-control
+          button(type="submit") submit
 
 

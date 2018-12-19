@@ -3,12 +3,12 @@ extends layout
 body
   block content
     h1= title
-    p You are on #{title}
+    p You are on #{details.title}
     div#mario-chat
       div#chat-window
         div#output
         div#feedback
-      input(type='text' placeholder='name and email')#handle
+      input(type='text' placeholder='name and email' value='#{details.email}, #{details.name}')#handle
       input(type='text' placeholder='messages')#message
       button#send send
       script(src="/javascripts/socket.io.js")
