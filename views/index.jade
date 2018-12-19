@@ -1,19 +1,27 @@
 extends layout
 
 block content
- 
   div.container
     h1= title
     p Welcome to #{title}
       div.rows
-        
-        form(action="/", method="post")
+        form(action="/submit", method="post")
           div.form-group
-            label(for="eadd") Email Address
-            input(type="text", name="emailid")#eadd.form-control
+            label(for="email") Email Address
+            input(type="text", name="email")#email.form-control
           div.form-group
             label(for="name") Name
             input(type="text", name="name")#name.form-control
           button(type="submit") submit
+    if errors
+      hr
+      h3 errors
+      ul
+        each err in errors
+          li= err
+        
+    
 
+          
+         
 

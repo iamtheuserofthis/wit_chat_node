@@ -28,10 +28,14 @@ app.set('view engine', 'html');
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(expressValidator())
+app.use(expressValidator()) //must be used after the body parsor is being used
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(expressSessions({'secret':'max', 'saveUninitialized':false, 'resave':false}))
+
+//saveUninitialized whether to save the uninitialized session or not
+//resave saves our session after each request even if the session was modified or unmodified.
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
