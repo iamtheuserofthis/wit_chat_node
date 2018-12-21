@@ -48,28 +48,27 @@ insertUser(udata, 'log_users')
 
 
 
-var findAnswer = (intent_val, entities_val)=>{
+var findAnswer = (query)=>{
   clientPromise('mongodb://localhost:27017','nodechat')
   .then(db=>{
       const collection = db.collection('nodetest')
-      collection.findOne({
-        "intent":intent_val,
-        "entity":{
-        $elemMatch:entities_val
-      }}, (err,result)=>{
+      collection.findOne(query, (err,result)=>{
           console.log(result.answer)
         })
   })
 }
 
 
-// db.nodetest.find( { "intent":"#get_info", "entity":{ $elemMatch:{ "exam":"star"}}},{"_id":0, "answer":1})
+/*
+query = { "intent":"#get_info", "entity.exam":"star"},{"_id":0, "answer":1}
+
+findAnswer(query)
+*/
 
 
-/* this query works fine
 
-var intent = "#get_info"
-var entities = {"exam":"star"}
-findAnswer(intent,entities)
+/* query builder
+
+findAnswer({"intent":"#difficulty_query","entity.form_elements":"change", "entity.registration":"True"})
 
 */
