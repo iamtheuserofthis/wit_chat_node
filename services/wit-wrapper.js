@@ -26,10 +26,16 @@ answer_questions('Tell me about documents').then((res)=>{
 */
 
 
-answer_questions('Hi').then((res)=>{
+answer_questions('give me information about afcat exam').then((res)=>{
     var elems = new Object()
     Object.keys(res.entities).forEach(element => {
-        elems[element] = res.entities[element][0].value
+        
+        console.log('element',element)
+        if(element=="intent" ){
+            elems[element] = '#'+res.entities[element][0].value
+        }else{
+            elems[element] = res.entities[element][0].value
+        }
     });
     console.log(elems)
  })
