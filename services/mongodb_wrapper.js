@@ -22,7 +22,7 @@ var clientPromise = (url,dbName)=>{
 //   console.log(err) 
 // })
 
-var insertUser = (userdata, collectionName)=>{
+module.exports.insertUser = (userdata, collectionName)=>{
   clientPromise('mongodb://localhost:27017','nodechat')
   .then(db=>{
       const collection = db.collection(collectionName)
@@ -48,7 +48,7 @@ insertUser(udata, 'log_users')
 
 
 
-var findAnswer = (query)=>{
+module.exports.findAnswer = (query)=>{
   clientPromise('mongodb://localhost:27017','nodechat')
   .then(db=>{
       const collection = db.collection('nodetest')
@@ -67,8 +67,8 @@ findAnswer(query)
 
 
 
-/* query builder
 
-findAnswer({"intent":"#difficulty_query","entity.form_elements":"change", "entity.registration":"True"})
 
-*/
+//findAnswer({"intent":"#difficulty_query","entity.form_elements":"change", "entity.registration":"True"})
+
+

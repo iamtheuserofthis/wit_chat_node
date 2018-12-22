@@ -1,4 +1,4 @@
-var db_connect = require('./mongodb_wrapper')
+var findAnswer = require('./mongodb_wrapper').findAnswer
 
 const {Wit, log} = require('node-wit')
 
@@ -25,8 +25,8 @@ answer_questions('Tell me about documents').then((res)=>{
  })
 */
 
-
-answer_questions('give me information about afcat exam').then((res)=>{
+/*
+answer_questions('star exam info').then((res)=>{
     var elems = new Object()
     Object.keys(res.entities).forEach(element => {
         
@@ -39,6 +39,26 @@ answer_questions('give me information about afcat exam').then((res)=>{
     });
     console.log(elems)
  })
+*/
+
+answer_questions('afcat exam info').then((res)=>{
+    var elems = new Object() 
+    Object.keys(res.entities).forEach(element=>{
+        if(element=="intent" ){
+            elems[element] = '#'+res.entities[element][0].value
+        }else{
+            elems["entity."+element] = res.entities[element][0].value
+        }
+    })
+    console.log
+    findAnswer(elems)
+
+})
 
 
+/*
+query = { "intent":"#get_info", "entity.exam":"star"},{"_id":0, "answer":1}
+
+findAnswer(query)
+*/
 
