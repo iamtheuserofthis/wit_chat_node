@@ -52,7 +52,8 @@ answer_questions('What can I carry to the exam').then((res)=>{
         }
     })
     console.log(elems)
-    findAnswer(elems)
+
+   
 
 })
 

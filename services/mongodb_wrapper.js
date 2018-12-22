@@ -1,13 +1,16 @@
 const MongoClient = require('mongodb').MongoClient;
 const assert = require('assert');
 
+
+var fs = require('fs')
 var url = 'mongodb://localhost:27017'
 var database = 'nodechat'
 
+
 var clientPromise = (url,dbName)=>{
   return new Promise((resolve, reject)=>{
-    MongoClient.connect(url,(err,client)=>{
-      if(err) reject(err);
+    MongoClient.connect(url,(err,client)=>{  //throw error if unable to connect to the database
+        if(err) reject(err);
       else resolve(client.db(dbName));
     })
   })
@@ -31,6 +34,7 @@ module.exports.insertUser = (userdata, collectionName)=>{
         console.log(result.result)
       })
   })
+  
 }
 
 /*
@@ -49,27 +53,29 @@ insertUser(udata, 'log_users')
 
 
 module.exports.findAnswer = (query)=>{
- 
+ var q_answer = null
   clientPromise('mongodb://localhost:27017','nodechat')
   .then(db=>{
-      const collection = db.collection('nodetest')
-      
-      collection.findOne(query, (err,result)=>{
-          assert.equal(err, null)
-          
+    const collection = db.collection('nodetest')
+    collection.findOne(query, (err,result)=>{
+    assert.equal(err, null)
           try{
-            console.log(result.answer)
-          }catch(err){
-            console.log(typeof(err))
-            console.log("error caught:",err.message)
+              q_answer = result.answer
+            }catch(err){
+            fs.appendFile(__dirname+'/../logs/mongo_unmatched.log',"[query]:"+JSON.stringify(query)+"\n",(err)=>{
+              if(err){
+                console.log(err)
+              }
+            })
+              q_answer = 'Unable to answer'
           }
           
-           
-          //throw new Error('Answer is emp')  //this error cannot be handled by a simple try catch as the process is completely async, being called in 
-                                          //a callback
-        })
-      }
-  )
+       })
+       
+      }).catch(err=>{
+        console.log(err)
+      })
+      
 }
 
 //when all catching fails before colapsing the application
@@ -87,5 +93,11 @@ findAnswer(query)
 
 
 //findAnswer({"intent":"#difficulty_query","entity.form_elements":"change", "entity.registration":"True"})
-
+/*
+find place to put this
+return new Promise((resolve,reject)=>{
+            if(err) reject(err)
+            else resolve(q_answer)
+          })
+*/
 
