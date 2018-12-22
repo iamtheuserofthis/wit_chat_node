@@ -41,7 +41,8 @@ answer_questions('star exam info').then((res)=>{
  })
 */
 
-answer_questions('afcat exam info').then((res)=>{
+
+answer_questions('What can I carry to the exam').then((res)=>{
     var elems = new Object() 
     Object.keys(res.entities).forEach(element=>{
         if(element=="intent" ){
@@ -50,7 +51,7 @@ answer_questions('afcat exam info').then((res)=>{
             elems["entity."+element] = res.entities[element][0].value
         }
     })
-    console.log
+    console.log(elems)
     findAnswer(elems)
 
 })

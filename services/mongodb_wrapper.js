@@ -49,16 +49,33 @@ insertUser(udata, 'log_users')
 
 
 module.exports.findAnswer = (query)=>{
+ 
   clientPromise('mongodb://localhost:27017','nodechat')
   .then(db=>{
       const collection = db.collection('nodetest')
+      
       collection.findOne(query, (err,result)=>{
-          console.log(result.answer)
+          assert.equal(err, null)
+          
+          try{
+            console.log(result.answer)
+          }catch(err){
+            console.log(typeof(err))
+            console.log("error caught:",err.message)
+          }
+          
+           
+          //throw new Error('Answer is emp')  //this error cannot be handled by a simple try catch as the process is completely async, being called in 
+                                          //a callback
         })
-  })
+      }
+  )
 }
 
-
+//when all catching fails before colapsing the application
+process.on('uncaughtException',(err)=>{
+  console.log('err caught failure:', err.message)
+})
 /*
 query = { "intent":"#get_info", "entity.exam":"star"},{"_id":0, "answer":1}
 
