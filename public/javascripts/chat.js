@@ -94,7 +94,7 @@ button.addEventListener('click',function(){
 //--------------------------------------socket events communication----------------------------------------------------
 
 
-/*
+
 socket.on('chat',function(data){
   feedback.innerHTML = ""
   output.innerHTML += '<p><strong>'+data.handle+' : </strong>'+data.message+' <p>'
@@ -104,6 +104,5 @@ socket.on('chat',function(data){
 socket.on('typing',function(data){
   feedback.innerHTML = '<p>'+data +' is thinking ....</p>'
 })
-*/
-//})
+
 

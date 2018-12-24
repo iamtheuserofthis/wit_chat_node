@@ -7,50 +7,65 @@ const client = new Wit({
     logger: new log.Logger(log.DEBUG) 
 })
 
-//console.log(client.message('afcat'))
+
 
 var mineQuery = (msg)=>{
     return client.message(msg)   
 }
 
-
-
 var getEntityQuery = (msg)=>{
-return new Promise((resolve,reject)=>{
-mineQuery('afcat exam info').then((res)=>{
-    var elems = new Object() 
-    Object.keys(res.entities).forEach(element=>{
-        if(element=="intent" ){
-            elems[element] = '#'+res.entities[element][0].value
-        }else{
-            elems["entity."+element] = res.entities[element][0].value
-        }
+    console.log('----------------user query------------',msg)
+    return new Promise((resolve,reject)=>{
+    mineQuery(msg).then((res)=>{
+        var elems = new Object() 
+        Object.keys(res.entities).forEach(element=>{
+            if(element=="intent" ){
+                elems[element] = '#'+res.entities[element][0].value
+            }else{
+                elems["entity."+element] = res.entities[element][0].value
+            }
+        })
+        resolve(elems)
+    }).catch(err=>{
+            reject(err)
+        })
+      })
+    }
+
+
+
+module.exports = function(io,socket){
+
+socket.on('chat',(data)=>{
+    console.log(data)
+    socket.emit('chat',data)
+    socket.emit('typing','Assistant')
+    
+    getEntityQuery(data.message).then(result=>{
+        console.log('------->',result)
+       return findAnswer(result)
+    }).then(result=>{
+        var res = {
+            handle:'Help Desk',
+            message :result                         //packages the respose for sending it to the front-end
+          } 
+          socket.emit('chat',res) 
+                        // emits chat event at the server side which is handled at the front end
+         
+        }).catch(err=>{
+            console.log(err)
+            
+        })   
     })
-    resolve(elems)
-}).catch(err=>{
-    reject(err)
-})
-})
 }
 
-//usage in actual sense
+
+
+/*
 getEntityQuery('afcat exam info').then(result=>{
     return findAnswer(result)
 }).then(result=>{
     console.log(result)
 })
-
-
-/* handling promise of answer from mongodb 
-findAnswer(elems).then(result=>{
-    console.log("----------------------logging this----------------------")
-    console.log(result)
-})
-})
-*/
-/*
-query = { "intent":"#get_info", "entity.exam":"star"},{"_id":0, "answer":1}
-
-findAnswer(query)
 */
 

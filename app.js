@@ -9,6 +9,7 @@ var expressSessions = require('express-session')
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var chatRouter = require('./routes/chat')
+var witWrap = require('./services/wit-wrapper')
 
 var app = express();
 
@@ -44,6 +45,7 @@ app.use('/chat', chatRouter);
 
 io.on('connect',(socket)=>{
   console.log(socket.id)
+  witWrap(io,socket)
 })
 
 
