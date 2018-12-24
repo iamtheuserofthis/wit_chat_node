@@ -17,13 +17,7 @@ var clientPromise = (url,dbName)=>{
 }
 
 
-// clientPromise('mongodb://localhost:27017','nodechat')
-// .then((db)=>{
-//   console.log(db)
-// })
-// .catch(err=>{ 
-//   console.log(err) 
-// })
+
 
 module.exports.insertUser = (userdata, collectionName)=>{
   clientPromise('mongodb://localhost:27017','nodechat')
@@ -38,19 +32,6 @@ module.exports.insertUser = (userdata, collectionName)=>{
 }
 
 /*
-sample query and data from the 
-
-var udata = {
-  username:'Vinay Negi',
-  email:'vinaynegivins@gmail.com'
-}
-
-insertUser(udata, 'log_users') 
-
-
-*/
-
-
 
 module.exports.findAnswer = (query)=>{
  var q_answer = null
@@ -69,7 +50,7 @@ module.exports.findAnswer = (query)=>{
             })
               q_answer = 'Unable to answer'
           }
-          
+          console.log(q_answer)
        })
        
       }).catch(err=>{
@@ -77,6 +58,7 @@ module.exports.findAnswer = (query)=>{
       })
       
 }
+*/
 
 //when all catching fails before colapsing the application
 process.on('uncaughtException',(err)=>{
@@ -85,12 +67,7 @@ process.on('uncaughtException',(err)=>{
 /*
 query = { "intent":"#get_info", "entity.exam":"star"},{"_id":0, "answer":1}
 
-findAnswer(query)
 */
-
-
-
-
 
 //findAnswer({"intent":"#difficulty_query","entity.form_elements":"change", "entity.registration":"True"})
 /*
@@ -101,3 +78,32 @@ return new Promise((resolve,reject)=>{
           })
 */
 
+
+module.exports.findAnswer = (query)=>{
+   return new Promise((resolve,reject)=>{
+   clientPromise('mongodb://localhost:27017','nodechat')
+   .then(db=>{    
+     const collection = db.collection('nodetest')
+     collection.findOne(query, (err,result)=>{
+      let q_answer
+     assert.equal(err, null)
+           try{
+               q_answer = result.answer
+             }catch(err){
+             fs.appendFile(__dirname+'/../logs/mongo_unmatched.log',"[query]:"+JSON.stringify(query)+"\n",(err)=>{
+               if(err){
+                 console.log(err)
+               }
+             })
+               q_answer = 'Unable to answer'
+           }
+           resolve(q_answer)   
+        })
+        
+     
+       }).catch(err=>{
+         reject(err)
+       })
+      })
+       
+ }

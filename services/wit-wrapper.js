@@ -9,40 +9,15 @@ const client = new Wit({
 
 //console.log(client.message('afcat'))
 
-answer_questions = (msg)=>{
+var mineQuery = (msg)=>{
     return client.message(msg)   
 }
 
 
 
-/* works but creating a json object is more helpful of mongodb query format
-
-answer_questions('Tell me about documents').then((res)=>{
-    Object.keys(res.entities).forEach(element => {
-        console.log(element+':'+res.entities[element][0].value)
-        
-    });
- })
-*/
-
-/*
-answer_questions('star exam info').then((res)=>{
-    var elems = new Object()
-    Object.keys(res.entities).forEach(element => {
-        
-        console.log('element',element)
-        if(element=="intent" ){
-            elems[element] = '#'+res.entities[element][0].value
-        }else{
-            elems[element] = res.entities[element][0].value
-        }
-    });
-    console.log(elems)
- })
-*/
-
-
-answer_questions('What can I carry to the exam').then((res)=>{
+var getEntityQuery = (msg)=>{
+return new Promise((resolve,reject)=>{
+mineQuery('afcat exam info').then((res)=>{
     var elems = new Object() 
     Object.keys(res.entities).forEach(element=>{
         if(element=="intent" ){
@@ -51,13 +26,28 @@ answer_questions('What can I carry to the exam').then((res)=>{
             elems["entity."+element] = res.entities[element][0].value
         }
     })
-    console.log(elems)
+    resolve(elems)
+}).catch(err=>{
+    reject(err)
+})
+})
+}
 
-   
-
+//usage in actual sense
+getEntityQuery('afcat exam info').then(result=>{
+    return findAnswer(result)
+}).then(result=>{
+    console.log(result)
 })
 
 
+/* handling promise of answer from mongodb 
+findAnswer(elems).then(result=>{
+    console.log("----------------------logging this----------------------")
+    console.log(result)
+})
+})
+*/
 /*
 query = { "intent":"#get_info", "entity.exam":"star"},{"_id":0, "answer":1}
 
