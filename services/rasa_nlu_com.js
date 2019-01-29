@@ -44,8 +44,8 @@ http.get('http://localhost:5005/status', res=>{
 //make post request to rasa core
 
 
-//add param for name
-var convo = function(msg, examName){
+//add param for unique name to maintain the session, 
+var convo = function(msg, examName,idTrack){
 return new Promise((resolve,reject)=>{
 const postData = JSON.stringify({
 'query':msg    
@@ -54,7 +54,7 @@ let option
 const optionsAfcat = {
     hostname:'10.208.34.106',
     port:5002,                                 //change
-    path:'/conversations/nlu_model_1/respond',//change
+    path:`/conversations/${idTrack}/respond`,//change it to maintain sesssions
     method:'POST',
     headers:{
         'Content-Type':'application/json',
@@ -65,7 +65,7 @@ const optionsAfcat = {
 const optionsStar = {
     hostname:'10.208.34.106',
     port:5005,
-    path:'/conversations/nlu_model_1/respond',
+    path:`/conversations/${idTrack}/respond`,
     method:'POST',
     headers:{
         'Content-Type':'application/json',
@@ -75,13 +75,14 @@ const optionsStar = {
 
 if(examName=='star'){
     console.log("STAR EXAM REQUEST")
+    
     option = optionsStar
     
 }else if(examName=='afcat'){
     console.log("AFCAT EXAM REQUEST")
     option = optionsAfcat
 }
-
+console.log("request\n",option)
 
 const req = http.request(option,(res)=>{
     console.log(`[RES.status] : ${res.statusCode}`)
@@ -110,12 +111,13 @@ req.end()
 
 
 module.exports = function(io, socket){
+    console.log(socket.id)
     console.log("successfully connected to rasa")
    socket.on('chat',data=>{
     console.log("exam name",data.examName)
         socket.emit('chat',data)
         socket.emit('typing','Assistant')
-        convo(data.message,data.examName).then(result=>{
+        convo(data.message,data.examName,`${socket.id}-${data.fullName.split(" ").join('_')}-${data.email}`).then(result=>{
             var reply = JSON.parse(result)
             var res={
                 handle:"Help Desk",
