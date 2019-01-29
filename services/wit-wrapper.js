@@ -35,9 +35,9 @@ var getEntityQuery = (msg)=>{
 
 
 module.exports = function(io,socket){
-
+    console.log("successfully imported")
 socket.on('chat',(data)=>{
-    console.log(data)
+    console.log("chat event emitted")
     socket.emit('chat',data)
     socket.emit('typing','Assistant')
     

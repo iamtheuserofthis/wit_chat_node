@@ -1,10 +1,15 @@
-var socket = io('http://localhost:4000');
+//url dependant
+var s = window.location.href
+var exam_name = s.split('&').pop().split('=').pop()
+console.log(exam_name)
+
+var socket = io('http://10.208.34.106:4000');
 var message = document.getElementById('message')
 var handle  = document.getElementById('handle')
 var output  = document.getElementById('output')
 var button  = document.getElementById('send')
 var feedback = document.getElementById('feedback')
-
+var pageName = document.getElementById('page_name')
 var firstTime = true
 
 
@@ -77,6 +82,7 @@ button.addEventListener('click',function(){
  var userInfo=userInfo = extractInformation(handle.value, emailChk(handle.value))
   
   socket.emit('chat',{
+      examName:exam_name,
       message:message.value,
       handle:userInfo.fname,
       fullName: userInfo.fname+" "+userInfo.lname,

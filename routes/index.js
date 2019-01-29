@@ -17,8 +17,12 @@ router.post('/submit',function(req,res,next){
   req.session.errors=errors
   res.redirect('/')
   }else{
-
-    res.redirect('/chat/?name='+req.body.name+'&email='+req.body.email)
+    var optionSelected = req.body.exam
+    // if(optionSelected=="star"){
+    res.redirect('/chat/?name='+req.body.name+'&email='+req.body.email+'&exam='+optionSelected)
+    // }else if(optionSelected=="afcat"){
+    //   res.redirect('/')
+    // }
     }
 
 })

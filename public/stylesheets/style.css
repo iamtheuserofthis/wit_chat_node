@@ -8,6 +8,8 @@ h2{
   color: #575ed8;
 }
 
+
+
 #mario-chat{
   max-width: 600px;
   margin: 30px auto;
@@ -17,7 +19,7 @@ h2{
 }
 
 #chat-window{
-  height: 400px;
+  height: 350px;
   overflow-x: hidden;
   overflow-y: scroll;
   background: #f9f9f9;

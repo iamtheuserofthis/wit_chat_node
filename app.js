@@ -9,7 +9,8 @@ var expressSessions = require('express-session')
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var chatRouter = require('./routes/chat')
-var witWrap = require('./services/wit-wrapper')
+//var witWrap = require('./services/wit-wrapper')
+var rasaWrap = require('./services/rasa_nlu_com')
 
 var app = express();
 
@@ -43,9 +44,11 @@ app.use('/users', usersRouter);
 app.use('/chat', chatRouter);
 
 
+//changes for connecting to the other socket has to be made here
+//changes in javascripts/chat.js
 io.on('connect',(socket)=>{
-  console.log(socket.id)
-  witWrap(io,socket)
+  console.log("connected socket id:",socket.id)
+  rasaWrap(io,socket)
 })
 
 

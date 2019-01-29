@@ -12,6 +12,11 @@ block content
           div.form-group
             label(for="name") Name
             input(type="text", name="name")#name.form-control
+          div.form-group
+            label(for="exam") Exam
+            select(name="exam")#exam.form-control
+               option(value="star") STAR
+               option(value="afcat") AFCAT
           button(type="submit") submit
     if errors
       hr
